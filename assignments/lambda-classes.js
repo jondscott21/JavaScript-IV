@@ -26,10 +26,14 @@ class Instructor extends People {
         console.log(`${student.name} recieves a perfect score on ${subject}`)
     }
     gradeChange(student) {
-        console.log(student.testTotal);
         student.testTotal += 1;
+        student.totalGrade += ((Math.floor(Math.random() * 101) + 20))
+        student.grade = student.totalGrade / student.testTotal;
+        student.grade = Math.floor(student.grade);
+        console.log(student.totalGrade);
         console.log(student.testTotal);
-        return student.grade += (((Math.floor(Math.random() * 101) + 1)) / student.testTotal)
+        console.log(student.grade);
+        return student.grade;
     }
 }
 
@@ -40,6 +44,7 @@ class Student extends People {
         this.favSubjects = attrs.favSubjects;
         this.grade = attrs.grade;
         this.testTotal = attrs.testTotal;
+        this.totalGrade = attrs.totalGrade;
     }
     listSubjects() {
         for(let i = 0; i < this.favSubjects.length; i++) {
@@ -51,6 +56,13 @@ class Student extends People {
     }
     sprintChallenge(subject) {
         console.log(`${this.name} has begun sprint challenge for ${subject}`)
+    }
+    graduate() {
+        if (this.grade >= 70) {
+            console.log(`${this.name} is graduating!`)
+        } else {
+            console.log(`Flex time!`);
+        }
     }
 }
 
@@ -84,6 +96,7 @@ const jon = new Student({
     favSubjects: ["Ruby", "Javascript"],
     grade: 80,
     testTotal: 1,
+    totalGrade: 80,
     previousBackground: "Retail"
 });
 const bob = new ProjectManager({
@@ -99,6 +112,9 @@ console.log(fred);
 fred.speak();
 fred.demo('HTML');
 fred.grade(jon, "HTML");
+
+fred.gradeChange(jon);
+fred.gradeChange(jon);
 fred.gradeChange(jon);
 
 // #### STUDENT TESTING ####
@@ -109,6 +125,8 @@ jon.PRAssignment("Javascript");
 jon.sprintChallenge("CSS");
 
 console.log(jon.grade);
+console.log(jon.testTotal);
+jon.graduate()
 
 // #### PROJECT MANAGER TESTING ####
 bob.speak();
