@@ -81,7 +81,7 @@ class ProjectManager extends Instructor {
 }
 
 // #### CLASS INSTANCES ####
-const fred = new Instructor({
+const tom = new Instructor({
     name: 'Tom',
     location: 'Seattle',
     age: 43,
@@ -109,13 +109,13 @@ const bob = new ProjectManager({
 
 // #### INSTRUCTOR TESTING
 console.log(fred);
-fred.speak();
-fred.demo('HTML');
-fred.grade(jon, "HTML");
+tom.speak();
+tom.demo('HTML');
+tom.grade(jon, "HTML");
 
-fred.gradeChange(jon);
-fred.gradeChange(jon);
-fred.gradeChange(jon);
+tom.gradeChange(jon);
+tom.gradeChange(jon);
+tom.gradeChange(jon);
 
 // #### STUDENT TESTING ####
 console.log(jon);
