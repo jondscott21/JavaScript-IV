@@ -25,14 +25,21 @@ class Instructor extends People {
     grade(student, subject) {
         console.log(`${student.name} recieves a perfect score on ${subject}`)
     }
+    gradeChange(student) {
+        console.log(student.testTotal);
+        student.testTotal += 1;
+        console.log(student.testTotal);
+        return student.grade += (((Math.floor(Math.random() * 101) + 1)) / student.testTotal)
+    }
 }
 
 class Student extends People {
     constructor(attrs) {
         super(attrs);
         this.previousBackground = attrs.previousBackground;
-        //make sure favSubjects ends up being an array
-        this.favSubjects = attrs.favSubjects
+        this.favSubjects = attrs.favSubjects;
+        this.grade = attrs.grade;
+        this.testTotal = attrs.testTotal;
     }
     listSubjects() {
         for(let i = 0; i < this.favSubjects.length; i++) {
@@ -57,6 +64,55 @@ class ProjectManager extends Instructor {
         console.log(`${this.name} announces to ${channel}, @channel standy times!`)
     }
     debugsCode(student, subject) {
-        console.log(`${this.name} debugs ${student.name}`)
+        console.log(`${this.name} debugs ${student.name}'s code on ${subject}`);
     }
 }
+
+// #### CLASS INSTANCES ####
+const fred = new Instructor({
+    name: 'Tom',
+    location: 'Seattle',
+    age: 43,
+    favLanguage: 'JavaScript',
+    specialty: 'Front-end',
+    catchPhrase: `I have no idea`
+});
+const jon = new Student({
+    name: "Jon",
+    location: "Morgan Hill",
+    age: 36,
+    favSubjects: ["Ruby", "Javascript"],
+    grade: 80,
+    testTotal: 1,
+    previousBackground: "Retail"
+});
+const bob = new ProjectManager({
+    name: "Bob",
+    location: "Fargo",
+    age: 29,
+    gradClassName: "WEB21",
+    favInstructor: "Tom"
+})
+
+// #### INSTRUCTOR TESTING
+console.log(fred);
+fred.speak();
+fred.demo('HTML');
+fred.grade(jon, "HTML");
+fred.gradeChange(jon);
+
+// #### STUDENT TESTING ####
+console.log(jon);
+jon.speak();
+jon.listSubjects();
+jon.PRAssignment("Javascript");
+jon.sprintChallenge("CSS");
+
+console.log(jon.grade);
+
+// #### PROJECT MANAGER TESTING ####
+bob.speak();
+bob.demo('java');
+bob.speak(jon, 'java');
+bob.standUp('Web21');
+bob.debugsCode(jon, 'java');
