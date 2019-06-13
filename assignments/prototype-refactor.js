@@ -15,14 +15,17 @@ Prototype Refactor
   * destroy() // prototype method that returns: `${this.name} was removed from the game.`
 */
 
-function GameObject(attributes) {
-    this.createdAt = attributes.createdAt;
-    this.name = attributes.name;
-    this.dimensions = attributes.dimensions;
+class GameObject {
+    constructor(attributes) {
+        this.createdAt = attributes.createdAt;
+        this.name = attributes.name;
+        this.dimensions = attributes.dimensions;
+    }
+    destroy() {
+        return `${this.name} was removed from the game.`
+    }
   }
-  GameObject.prototype.destroy = function() {
-    return `${this.name} was removed from the game.`
-  }
+  
   
   /*
     === CharacterStats ===
@@ -30,14 +33,16 @@ function GameObject(attributes) {
     * takeDamage() // prototype method -> returns the string '<object name> took damage.'
     * should inherit destroy() from GameObject's prototype
   */
-  function CharacterStats(attributes) {
-    GameObject.call(this, attributes);
-    this.healthPoints = attributes.healthPoints;
+  class CharacterStats extends GameObject {
+    constructor(attributes) {
+        super(attributes);
+        this.healthPoints = attributes.healthPoints;
+    }
+    takeDamage() {
+        return `${this.name} took damage`;
+    }
   }
-  CharacterStats.prototype = Object.create(GameObject.prototype)
-  CharacterStats.prototype.takeDamage = function() {
-    return `${this.name} took damage`;
-  }
+  
   
   /*
     === Humanoid (Having an appearance or character resembling that of a human.) ===
@@ -48,66 +53,71 @@ function GameObject(attributes) {
     * should inherit destroy() from GameObject through CharacterStats
     * should inherit takeDamage() from CharacterStats
   */
-  class Humanoid {
+  class Humanoid extends CharacterStats {
     constructor(attributes) {
+    super(attributes);
     this.team = attributes.team;
     this.weapons = attributes.weapons;
     this.language = attributes.language;
     }
-    
+    greet() {
+        return `${this.name} offers a greeting in ${this.language}`;
+    }
   }
-  Humanoid.prototype = Object.create(CharacterStats.prototype);
-  Humanoid.prototype.greet = function() {
-    return `${this.name} offers a greeting in ${this.language}`;
-  }
+//   Humanoid.prototype = Object.create(CharacterStats.prototype);
+ 
   
   
   // ==== NEW PROTOS ====
-  function Hero(attributes) {
-    Humanoid.call(this, attributes);
+  class Hero extends Humanoid  {
+      constructor(attributes) {
+        super(attributes);
+      }
+      attack(enemy) {
+        if (enemy.healthPoints > 0) {
+          if (this.healthPoints > 0) {
+            enemy.healthPoints -= (Math.floor(Math.random() * 26) + 1);
+            if (enemy.healthPoints > 0) {
+              let weaponOfChoice = Math.floor(Math.random() * this.weapons.length);
+              return `${this.name} swings ${this.weapons[weaponOfChoice]} at ${enemy.name}. ${enemy.name} is down to ${enemy.healthPoints} hp!`;
+            } else {
+              return `${enemy.name} has perished!`;
+            }
+          } else {
+            return `${this.name} is dead.`;
+          }
+        } else {
+          return `${this.name} was victorious!`;
+        }
+      }
   }
   
-  Hero.prototype = Object.create(Humanoid.prototype);
-  Hero.prototype.attack = function(enemy) {
-    if (enemy.healthPoints > 0) {
-      if (this.healthPoints > 0) {
-        enemy.healthPoints -= (Math.floor(Math.random() * 26) + 1);
-        if (enemy.healthPoints > 0) {
-          weaponOfChoice = Math.floor(Math.random() * this.weapons.length);
-          return `${this.name} swings ${this.weapons[weaponOfChoice]} at ${enemy.name}. ${enemy.name} is down to ${enemy.healthPoints} hp!`;
-        } else {
-          return `${enemy.name} has perished!`;
-        }
-      } else {
-        return `${this.name} is dead.`;
+  
+  
+  
+  class Villain extends Humanoid {
+      constructor(attributes) {
+          super(attributes);
       }
-    } else {
-      return `${this.name} was victorious!`;
-    }
+      attack(enemy) {
+        if (enemy.healthPoints > 0) {
+          if (this.healthPoints > 0) {
+            enemy.healthPoints -= (Math.floor(Math.random() * 26) + 1);
+            if (enemy.healthPoints > 0) {
+              let weaponOfChoice = Math.floor(Math.random() * this.weapons.length);
+              return `${this.name} casts ${this.weapons[weaponOfChoice]} at ${enemy.name}. ${enemy.name} is down to ${enemy.healthPoints} hp!`;
+            } else {
+              return `${enemy.name} has perished!`;
+            }
+          } else {
+            return `${this.name} is dead.`;
+          }
+        } else {
+          return `${this.name} was victorious!`;
+        }
+      }
   }
   
-  function Villain(attributes) {
-    Humanoid.call(this, attributes);
-    
-  }
-  Villain.prototype = Object.create(Humanoid.prototype);
-  Villain.prototype.attack = function(enemy) {
-    if (enemy.healthPoints > 0) {
-      if (this.healthPoints > 0) {
-        enemy.healthPoints -= (Math.floor(Math.random() * 26) + 1);
-        if (enemy.healthPoints > 0) {
-          weaponOfChoice = Math.floor(Math.random() * this.weapons.length);
-          return `${this.name} casts ${this.weapons[weaponOfChoice]} at ${enemy.name}. ${enemy.name} is down to ${enemy.healthPoints} hp!`;
-        } else {
-          return `${enemy.name} has perished!`;
-        }
-      } else {
-        return `${this.name} is dead.`;
-      }
-    } else {
-      return `${this.name} was victorious!`;
-    }
-  }
   
   /*
     * Inheritance chain: GameObject -> CharacterStats -> Humanoid
