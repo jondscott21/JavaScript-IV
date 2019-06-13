@@ -27,7 +27,7 @@ class Instructor extends People {
     }
     gradeChange(student) {
         student.testTotal += 1;
-        student.totalGrade += ((Math.floor(Math.random() * 101) + 20))
+        student.totalGrade += ((Math.floor(Math.random() * 100) + 20))
         student.grade = student.totalGrade / student.testTotal;
         student.grade = Math.floor(student.grade);
         console.log(student.totalGrade);
@@ -108,7 +108,7 @@ const bob = new ProjectManager({
 })
 
 // #### INSTRUCTOR TESTING
-console.log(fred);
+console.log(tom);
 tom.speak();
 tom.demo('HTML');
 tom.grade(jon, "HTML");
@@ -134,3 +134,4 @@ bob.demo('java');
 bob.speak(jon, 'java');
 bob.standUp('Web21');
 bob.debugsCode(jon, 'java');
+bob.gradeChange(jon);
